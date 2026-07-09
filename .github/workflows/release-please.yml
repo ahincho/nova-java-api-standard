@@ -1,21 +1,12 @@
-name: Release Please
-
+﻿name: Test
 on:
   push:
-    branches:
-      - main
-
+    branches: [main]
 permissions:
   contents: write
   pull-requests: write
-
 jobs:
-  release-please:
-    uses: ahincho/nova-devops/.github/workflows/reusable-release-please.yml@main
-    with:
-      release-type: java
-      package-name: pe.edu.nova.java.libs:nova-api-standard
-      config-file: .release-please-config.json
-      manifest-file: .release-please-manifest.json
-    secrets:
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  hello:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "test ok"
