@@ -1,1 +1,1 @@
-rootProject.name = "api-standard"
+rootProject.name = "nova-api-standard"
