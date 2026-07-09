@@ -1,4 +1,4 @@
-name: Publish on Tag
+name: Publish on Tag (Standalone Test)
 
 on:
   push:
@@ -7,7 +7,34 @@ on:
   workflow_dispatch:
 
 jobs:
-  publish:
-    uses: ahincho/nova-devops/.github/workflows/reusable-release-publish.yml@main
-    secrets:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  test-publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Print tag info
+        run: |
+          echo "Tag: ${{ github.ref_name }}"
+          echo "Repository: ${{ github.repository }}"
+
+      - name: Validate tag
+        run: |
+          if [[ ! "${{ github.ref_name }}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::Tag ${{ github.ref_name }} does not match vX.Y.Z format"
+            exit 1
+          fi
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+
+      - name: Print gradle properties
+        run: |
+          echo "Current gradle.properties:"
+          cat gradle.properties || echo "no gradle.properties"
+
+      - name: Echo success
+        run: echo "Test workflow completed successfully"
