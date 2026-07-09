@@ -11,7 +11,7 @@ plugins {
 versioning {
     releaseMode = "snapshot"
     displayMode = "snapshot"
-    dirty = { it }
+    dirty = { s: String -> s }
     releaseBuild = false
 }
 
