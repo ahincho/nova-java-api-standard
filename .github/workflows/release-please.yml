@@ -14,7 +14,7 @@ jobs:
     uses: ahincho/nova-devops/.github/workflows/reusable-release-please.yml@main
     with:
       release-type: java
-      package-name: pe.edu.nova.java.libs:nova-api-standard
+      path: .
       config-file: .release-please-config.json
       manifest-file: .release-please-manifest.json
     secrets:
