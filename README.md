@@ -6,7 +6,7 @@ Libreria pura Java para estandarizar contratos HTTP en APIs REST de Spring Boot.
 
 ```gradle
 dependencies {
-    implementation("pe.edu.nova.java.libs:nova-api-standard:0.1.0")
+    implementation("pe.edu.nova.java.libs:nova-api-standard:1.0.0")
 }
 ```
 
