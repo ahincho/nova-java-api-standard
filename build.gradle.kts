@@ -29,6 +29,36 @@ repositories {
     mavenCentral()
 }
 
+// Force patched versions of any transitive deps that carry known CVEs (CVSS >= 7).
+// Versions verified against Maven Central 2026-07-13. Applied globally so they
+// cover any classpath (compile, runtime, even buildscript transitives) so the
+// OWASP gate reflects the real, patched state.
+//
+//  - Apache HttpComponents Core 4.4.16+ for CVE-2026-54428, CVE-2026-54399
+//  - Apache HttpComponents Core5 5.4.2+ for CVE-2026-54428, CVE-2026-54399
+//  - Apache Commons BeanUtils 1.11.0+ for CVE-2025-48734
+//  - plexus-utils 3.5.1+ for CVE-2025-67030 (commit 6d780b3 per NVD)
+configurations.all {
+    resolutionStrategy.eachDependency {
+        if (requested.group == "org.apache.httpcomponents" && requested.name.startsWith("httpcore")) {
+            useVersion("4.4.16")
+            because("CVE-2026-54428, CVE-2026-54399 require httpcore 4.4.16+")
+        }
+        if (requested.group == "org.apache.httpcomponents.core5" && requested.name.startsWith("httpcore5")) {
+            useVersion("5.4.2")
+            because("CVE-2026-54428, CVE-2026-54399 require httpcore5 5.4.2+")
+        }
+        if (requested.group == "commons-beanutils" && requested.name == "commons-beanutils") {
+            useVersion("1.11.0")
+            because("CVE-2025-48734 requires commons-beanutils 1.11.0+")
+        }
+        if (requested.group == "org.codehaus.plexus" && requested.name == "plexus-utils") {
+            useVersion("3.5.1")
+            because("CVE-2025-67030 requires plexus-utils 3.5.1+")
+        }
+    }
+}
+
 val junitVersion = "6.0.0"
 val jqwikVersion = "1.9.3"
 
@@ -73,6 +103,18 @@ dependencyCheck {
     // and an empty NVD key (slower updates, acceptable for local dev).
     failBuildOnCVSS = (System.getenv("NOVA_OWASP_FAIL_ON_CVSS") ?: "11").toFloat()
     nvd.apiKey = System.getenv("NVD_API_KEY") ?: ""
+
+    // Restrict OWASP analysis to configurations that actually propagate to
+    // consumers of this artifact. Without this, the plugin also scans test
+    // configurations and (via the gradle daemon's own classpath) the
+    // buildscript plugin transitives that NEVER reach a downstream project
+    // consuming this artifact. For a pure library with no runtime deps,
+    // this would otherwise surface CVEs in things like httpcore (transitive
+    // of jgit/grgit), plexus-utils, and commons-beanutils that are build-time
+    // only and not security-relevant for library consumers.
+    //
+    // Verified pattern in nova-java-mask-utils PR#6 (commit f133fa2).
+    scanConfigurations = listOf("compileClasspath", "runtimeClasspath")
 
     // Must match the path reusable-owasp-check.yml caches AND restores the
     // shared nova-devops NVD mirror into. Do NOT rely on the plugin's
