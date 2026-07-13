@@ -1,16 +1,16 @@
 {
+  "last-release-sha": "385bdf5d68942dcf5a61b38ca2e7a23b984759cc",
   "packages": {
     ".": {
+      "component": "nova-api-standard",
       "package-name": "pe.edu.nova.java.libs:nova-api-standard",
       "release-type": "java",
+      "include-component-in-tag": false,
+      "skip-snapshot": true,
       "bump-minor-pre-major": true,
       "bump-patch-for-minor-pre-major": true,
       "draft": false,
       "prerelease": false
     }
-  },
-  "last-release-sha": "385bdf5d68942dcf5a61b38ca2e7a23b984759cc",
-  "include-component-in-tag": false,
-  "include-v-in-tag": true,
-  "release-type": "java"
+  }
 }
