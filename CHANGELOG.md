@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.0.1](https://github.com/ahincho/nova-java-api-standard/compare/v1.0.0...v1.0.1) (2026-07-13)
+
+
+### Bug Fixes
+
+* **ci:** add component + skip-snapshot + manifest-file (mask-utils pattern) ([abe2ab1](https://github.com/ahincho/nova-java-api-standard/commit/abe2ab1dddea7a3558a460665fbf83d886fa358b))
+* **ci:** add last-release-sha, include-component-in-tag: false, release-type: java to top-level config; pass manifest-file in wrapper ([98b4ff2](https://github.com/ahincho/nova-java-api-standard/commit/98b4ff2cd2fc42f79752d3ca134473b130a01a8f))
+
+
+### Documentation
+
+* fix stale version in install instructions (0.1.0 -&gt; 1.0.0) ([a17a351](https://github.com/ahincho/nova-java-api-standard/commit/a17a351401b3246446e5937e572b6337a227524f))
+
 ## 1.0.0 (2026-07-10)
 
 
